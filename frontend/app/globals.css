@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* ─── Tailwind Theme (direct values — no var() in @theme) ───── */
+@theme inline {
+  --font-display: var(--font-instrument);
+  --font-sans:    var(--font-dm);
+
+  --color-background:          #F5F3ED;
+  --color-surface:             #FFFFFF;
+  --color-surface-secondary:   #EFECE5;
+  --color-border:              #E0DCCE;
+  --color-border-bright:       #C2BBAA;
+  --color-text:                #1B3A2D;
+  --color-body:                #4A6358;
+  --color-muted:               #8EA098;
+  --color-primary:             #1B3A2D;
+  --color-accent:              #C6E030;
+  --color-hot:                 #E84040;
+  --color-warm:                #E89020;
+  --color-cold:                #3B7FD4;
+  --color-hot-muted:           color-mix(in srgb, #E84040 10%, transparent);
+  --color-warm-muted:          color-mix(in srgb, #E89020 10%, transparent);
+  --color-cold-muted:          color-mix(in srgb, #3B7FD4 10%, transparent);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: #F5F3ED;
+  color: #1B3A2D;
+  font-family: var(--font-dm), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s ease-out both;
+}
+
+/* ─── Focus ──────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid #1B3A2D;
+  outline-offset: 2px;
+}

@@ -1,0 +1,16 @@
+# Environment variables — never commit these
+.env
+.env.local
+.env*.local
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+trigger/.trigger/
+
+# OS
+.DS_Store
+Thumbs.db
