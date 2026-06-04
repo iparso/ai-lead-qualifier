@@ -165,7 +165,7 @@ export default function LeadForm({ onResult, onError, disabled }: Props) {
         <button
           type="submit"
           disabled={disabled}
-          className="bg-accent text-primary font-semibold text-sm px-8 py-3 rounded-lg hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30 active:translate-y-0 active:shadow-none transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+          className="bg-accent text-primary font-semibold text-sm px-8 py-3 rounded-lg cursor-pointer hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/30 active:translate-y-0 active:shadow-none transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
         >
           {disabled ? "Analysing…" : "Analyse Lead →"}
         </button>
