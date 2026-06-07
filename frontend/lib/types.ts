@@ -24,6 +24,8 @@ export type LeadRecord = {
   id: string;
   company_name: string;
   contact_name: string;
+  industry: string;
+  company_size: string;
   tier: "Hot" | "Warm" | "Cold" | null;
   score: number | null;
   created_at: string;

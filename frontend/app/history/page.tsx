@@ -31,7 +31,7 @@ export default async function HistoryPage() {
   const { data: leads } = await supabase
     .from("leads")
     .select(
-      "id, company_name, contact_name, tier, score, created_at, completed_at"
+      "id, company_name, contact_name, industry, company_size, tier, score, created_at, completed_at"
     )
     .order("created_at", { ascending: false });
 
@@ -82,7 +82,7 @@ export default async function HistoryPage() {
                       {lead.company_name}
                     </p>
                     <p className="text-xs text-muted mt-0.5 truncate">
-                      {lead.contact_name}
+                      {lead.contact_name} · {lead.industry} · {lead.company_size}
                     </p>
                   </div>
 
