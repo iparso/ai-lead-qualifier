@@ -71,9 +71,10 @@ export default async function HistoryPage() {
               const isPending = !lead.completed_at;
 
               return (
-                <div
+                <Link
                   key={lead.id}
-                  className="bg-surface rounded-2xl border border-border px-6 py-5 flex items-center gap-5 flex-wrap"
+                  href={`/history/${lead.id}`}
+                  className="bg-surface rounded-2xl border border-border px-6 py-5 flex items-center gap-5 flex-wrap hover:border-primary transition-colors"
                 >
                   {/* Company + contact */}
                   <div className="flex-1 min-w-0">
@@ -124,7 +125,7 @@ export default async function HistoryPage() {
                       {formatDate(lead.created_at)}
                     </p>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

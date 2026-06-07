@@ -29,3 +29,25 @@ export type LeadRecord = {
   created_at: string;
   completed_at: string | null;
 };
+
+export type LeadDetail = {
+  id: string;
+  company_name: string;
+  industry: string;
+  company_size: string;
+  contact_name: string;
+  contact_role: string;
+  pain_points: string;
+  budget_signals: string | null;
+  intent_signals: string | null;
+  current_solution: string | null;
+  tier: "Hot" | "Warm" | "Cold" | null;
+  score: number | null;
+  company_fit: string | null;
+  contact_authority: string | null;
+  pain_alignment: string | null;
+  intent_strength: string | null;
+  recommendation: string | null;
+  created_at: string;
+  completed_at: string | null;
+};
