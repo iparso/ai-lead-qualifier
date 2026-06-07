@@ -82,7 +82,7 @@ export default async function HistoryPage() {
                       {lead.company_name}
                     </p>
                     <p className="text-xs text-muted mt-0.5 truncate">
-                      {lead.contact_name} · {lead.industry} · {lead.company_size}
+                      {lead.contact_name} · {lead.industry} · {lead.company_size} employees
                     </p>
                   </div>
 
