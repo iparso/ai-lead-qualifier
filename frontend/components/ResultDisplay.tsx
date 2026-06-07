@@ -53,22 +53,26 @@ export default function ResultDisplay({
     savedRef.current = true;
 
     const supabase = createClient();
-    supabase
-      .from("leads")
-      .update({
-        score: output.score,
-        tier: output.tier,
-        company_fit: output.companyFit,
-        contact_authority: output.contactAuthority,
-        pain_alignment: output.painAlignment,
-        intent_strength: output.intentStrength,
-        recommendation: output.recommendation,
-        completed_at: new Date().toISOString(),
-      })
-      .eq("id", leadId)
-      .then(({ error }) => {
-        if (error) console.error("Failed to save result:", error);
-      });
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      supabase
+        .from("leads")
+        .update({
+          score: output.score,
+          tier: output.tier,
+          company_fit: output.companyFit,
+          contact_authority: output.contactAuthority,
+          pain_alignment: output.painAlignment,
+          intent_strength: output.intentStrength,
+          recommendation: output.recommendation,
+          completed_at: new Date().toISOString(),
+        })
+        .eq("id", leadId)
+        .eq("user_id", user.id)
+        .then(({ error }) => {
+          if (error) console.error("Failed to save result:", error);
+        });
+    });
   }, [status, output, leadId]);
 
   if (error) {

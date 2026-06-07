@@ -33,6 +33,7 @@ export default async function HistoryPage() {
     .select(
       "id, company_name, contact_name, industry, company_size, tier, score, created_at, completed_at"
     )
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
   const rows = (leads ?? []) as LeadRecord[];

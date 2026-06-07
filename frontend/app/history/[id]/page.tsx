@@ -32,6 +32,7 @@ export default async function LeadDetailPage({
     .from("leads")
     .select("*")
     .eq("id", id)
+    .eq("user_id", user.id)
     .single();
 
   if (error || !data) notFound();
