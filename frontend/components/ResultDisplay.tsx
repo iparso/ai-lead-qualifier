@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useRealtimeRun } from "@trigger.dev/react-hooks";
 import type { QualificationResult } from "@/lib/types";
+import { createClient } from "@/lib/supabase/browser";
 
 type Props = {
   runId: string;
   publicToken: string;
+  leadId: string;
   onReset: () => void;
 };
 
@@ -33,8 +36,40 @@ const TIER_CONFIG = {
   },
 } as const;
 
-export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
+export default function ResultDisplay({
+  runId,
+  publicToken,
+  leadId,
+  onReset,
+}: Props) {
   const { run, error } = useRealtimeRun(runId, { accessToken: publicToken });
+  const savedRef = useRef(false);
+
+  const status = run?.status;
+  const output = run?.output as QualificationResult | undefined;
+
+  useEffect(() => {
+    if (status !== "COMPLETED" || !output || savedRef.current) return;
+    savedRef.current = true;
+
+    const supabase = createClient();
+    supabase
+      .from("leads")
+      .update({
+        score: output.score,
+        tier: output.tier,
+        company_fit: output.companyFit,
+        contact_authority: output.contactAuthority,
+        pain_alignment: output.painAlignment,
+        intent_strength: output.intentStrength,
+        recommendation: output.recommendation,
+        completed_at: new Date().toISOString(),
+      })
+      .eq("id", leadId)
+      .then(({ error }) => {
+        if (error) console.error("Failed to save result:", error);
+      });
+  }, [status, output, leadId]);
 
   if (error) {
     return (
@@ -49,8 +84,6 @@ export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
       </Card>
     );
   }
-
-  const status = run?.status;
 
   const isInProgress =
     !run ||
@@ -104,7 +137,7 @@ export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
     );
   }
 
-  if (status !== "COMPLETED" || !run.output) {
+  if (status !== "COMPLETED" || !output) {
     return (
       <Card>
         <div className="text-center py-10">
@@ -114,8 +147,7 @@ export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
     );
   }
 
-  const result = run.output as QualificationResult;
-  const tier = TIER_CONFIG[result.tier];
+  const tier = TIER_CONFIG[output.tier];
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -132,7 +164,7 @@ export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
               <span
                 className={`font-display text-8xl leading-none ${tier.text}`}
               >
-                {result.score}
+                {output.score}
               </span>
               <span className="text-muted text-xl mb-2">/10</span>
             </div>
@@ -156,10 +188,10 @@ export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
       {/* Assessment Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
-          { label: "Company Fit", value: result.companyFit, index: 1 },
-          { label: "Contact Authority", value: result.contactAuthority, index: 2 },
-          { label: "Pain Alignment", value: result.painAlignment, index: 3 },
-          { label: "Intent Strength", value: result.intentStrength, index: 4 },
+          { label: "Company Fit", value: output.companyFit, index: 1 },
+          { label: "Contact Authority", value: output.contactAuthority, index: 2 },
+          { label: "Pain Alignment", value: output.painAlignment, index: 3 },
+          { label: "Intent Strength", value: output.intentStrength, index: 4 },
         ].map(({ label, value, index }) => (
           <div
             key={label}
@@ -182,7 +214,7 @@ export default function ResultDisplay({ runId, publicToken, onReset }: Props) {
         <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-3">
           Recommendation
         </p>
-        <p className="text-sm leading-relaxed text-body">{result.recommendation}</p>
+        <p className="text-sm leading-relaxed text-body">{output.recommendation}</p>
       </div>
 
       {/* Reset */}

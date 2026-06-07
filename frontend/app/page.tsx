@@ -7,14 +7,14 @@ import ResultDisplay from "@/components/ResultDisplay";
 type Phase =
   | { name: "idle" }
   | { name: "loading" }
-  | { name: "result"; runId: string; publicToken: string }
+  | { name: "result"; runId: string; publicToken: string; leadId: string }
   | { name: "error"; message: string };
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>({ name: "idle" });
 
-  function handleResult(runId: string, publicToken: string) {
-    setPhase({ name: "result", runId, publicToken });
+  function handleResult(runId: string, publicToken: string, leadId: string) {
+    setPhase({ name: "result", runId, publicToken, leadId });
   }
 
   function handleError(message: string) {
@@ -30,26 +30,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-background border-b border-border sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center shrink-0">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path
-                  d="M6 0L7.5 4H12L8.5 6.5L10 10.5L6 8L2 10.5L3.5 6.5L0 4H4.5L6 0Z"
-                  fill="#C6E030"
-                />
-              </svg>
-            </div>
-            <span className="font-sans font-semibold text-primary text-sm tracking-tight">
-              Lead Qualifier
-            </span>
-          </div>
-          <span className="text-xs text-muted">v1.0</span>
-        </div>
-      </header>
-
       <main className="max-w-4xl mx-auto px-6 py-14 pb-24">
         {/* Hero */}
         <div className="mb-10">
@@ -93,9 +73,9 @@ export default function Home() {
         {isFormPhase ? (
           <div className="animate-fade-in">
             <LeadForm
-              onResult={(runId, token) => {
+              onResult={(runId, token, leadId) => {
                 setPhase({ name: "loading" });
-                handleResult(runId, token);
+                handleResult(runId, token, leadId);
               }}
               onError={handleError}
               disabled={phase.name === "loading"}
@@ -105,6 +85,7 @@ export default function Home() {
           <ResultDisplay
             runId={phase.runId}
             publicToken={phase.publicToken}
+            leadId={phase.leadId}
             onReset={reset}
           />
         ) : null}

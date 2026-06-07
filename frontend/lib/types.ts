@@ -19,3 +19,13 @@ export type QualificationResult = {
   intentStrength: string;
   recommendation: string;
 };
+
+export type LeadRecord = {
+  id: string;
+  company_name: string;
+  contact_name: string;
+  tier: "Hot" | "Warm" | "Cold" | null;
+  score: number | null;
+  created_at: string;
+  completed_at: string | null;
+};

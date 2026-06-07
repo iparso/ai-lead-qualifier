@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, DM_Sans } from "next/font/google";
 import "./globals.css";
+import NavBar from "@/components/NavBar";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -30,7 +31,10 @@ export default function RootLayout({
       lang="en"
       className={`${instrumentSerif.variable} ${dmSans.variable} h-full`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <NavBar />
+        {children}
+      </body>
     </html>
   );
 }

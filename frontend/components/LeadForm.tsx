@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { LeadPayload } from "@/lib/types";
 
 type Props = {
-  onResult: (runId: string, publicToken: string) => void;
+  onResult: (runId: string, publicToken: string, leadId: string) => void;
   onError: (message: string) => void;
   disabled: boolean;
 };
@@ -43,7 +43,7 @@ export default function LeadForm({ onResult, onError, disabled }: Props) {
         onError(data.error ?? "Something went wrong");
         return;
       }
-      onResult(data.runId, data.publicToken);
+      onResult(data.runId, data.publicToken, data.leadId);
     } catch {
       onError("Network error — please try again");
     }
