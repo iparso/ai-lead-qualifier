@@ -52,6 +52,14 @@ export default async function HistoryPage() {
             Every lead you&apos;ve run through the qualifier, with their scores
             and tiers.
           </p>
+          <div className="mt-6">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 bg-primary text-accent font-semibold text-sm px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              New Analysis →
+            </Link>
+          </div>
         </div>
 
         {rows.length === 0 ? (
