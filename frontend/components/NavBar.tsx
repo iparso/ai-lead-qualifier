@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import LogoutButton from "./LogoutButton";
 
 export default async function NavBar() {
@@ -10,8 +11,8 @@ export default async function NavBar() {
 
   let isPaid = false;
   if (user) {
-    const { data: profile } = await supabase
-      .from("profiles")
+    const serviceClient = createServiceClient();
+    const { data: profile } = await (serviceClient.from("profiles") as any)
       .select("subscription_status")
       .eq("id", user.id)
       .single();
