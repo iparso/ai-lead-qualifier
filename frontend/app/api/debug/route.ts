@@ -8,6 +8,11 @@ export async function GET() {
 
   if (!user) return NextResponse.json({ error: "not logged in" });
 
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const keyInfo = serviceRoleKey
+    ? `set (length=${serviceRoleKey.length}, prefix=${serviceRoleKey.slice(0, 10)})`
+    : "MISSING";
+
   const serviceClient = createServiceClient();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,5 +26,6 @@ export async function GET() {
     email: user.email,
     profile,
     error: error?.message ?? null,
+    serviceRoleKeyInfo: keyInfo,
   });
 }
