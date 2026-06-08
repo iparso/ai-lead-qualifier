@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { stripe } from "@/lib/stripe";
 
 export async function GET(request: NextRequest) {
@@ -12,7 +13,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const { data: profile } = await supabase
+  const serviceClient = createServiceClient();
+
+  const { data: profile } = await serviceClient
     .from("profiles")
     .select("stripe_customer_id")
     .eq("id", user.id)
@@ -27,7 +30,7 @@ export async function GET(request: NextRequest) {
     });
     customerId = customer.id;
 
-    await supabase
+    await serviceClient
       .from("profiles")
       .upsert({ id: user.id, stripe_customer_id: customerId });
   }
