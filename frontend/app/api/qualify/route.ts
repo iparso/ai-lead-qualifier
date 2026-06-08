@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { tasks, auth } from "@trigger.dev/sdk";
 import type { LeadPayload } from "@/lib/types";
 import { createClient } from "@/lib/supabase/server";
+import { getTodayUsageCount, isPaidUser } from "@/lib/subscription";
 
 const REQUIRED_FIELDS: (keyof LeadPayload)[] = [
   "companyName",
@@ -20,6 +21,19 @@ export async function POST(request: NextRequest) {
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const [profileResult, todayCount] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("subscription_status")
+      .eq("id", user.id)
+      .single(),
+    getTodayUsageCount(user.id, supabase),
+  ]);
+
+  if (!isPaidUser(profileResult.data) && todayCount >= 2) {
+    return NextResponse.json({ error: "limit_reached" }, { status: 402 });
   }
 
   let body: unknown;

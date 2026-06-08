@@ -8,6 +8,17 @@ export default async function NavBar() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  let isPaid = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("subscription_status")
+      .eq("id", user.id)
+      .single();
+    const status = profile?.subscription_status;
+    isPaid = status === "active" || status === "trialing";
+  }
+
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50">
       <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -33,6 +44,24 @@ export default async function NavBar() {
             >
               History
             </Link>
+            <Link
+              href="/billing"
+              className="text-xs text-muted hover:text-primary transition-colors font-medium"
+            >
+              Billing
+            </Link>
+            {isPaid ? (
+              <span className="text-xs font-semibold text-background bg-primary px-2.5 py-1 rounded-full">
+                Pro
+              </span>
+            ) : (
+              <a
+                href="/api/stripe/checkout"
+                className="text-xs font-semibold text-background bg-primary px-3 py-1.5 rounded-full hover:opacity-80 transition-opacity"
+              >
+                Upgrade
+              </a>
+            )}
             <span className="text-xs text-muted hidden sm:block">
               {user.email}
             </span>
