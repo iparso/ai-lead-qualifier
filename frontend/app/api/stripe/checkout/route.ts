@@ -30,8 +30,8 @@ export async function GET(request: NextRequest) {
     });
     customerId = customer.id;
 
-    await serviceClient
-      .from("profiles")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (serviceClient.from("profiles") as any)
       .upsert({ id: user.id, stripe_customer_id: customerId });
   }
 
