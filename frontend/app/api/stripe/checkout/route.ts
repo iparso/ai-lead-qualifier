@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     .eq("id", user.id)
     .single();
 
-  let customerId = profile?.stripe_customer_id as string | null;
+  let customerId = (profile as { stripe_customer_id: string | null } | null)?.stripe_customer_id ?? null;
 
   if (!customerId) {
     const customer = await stripe.customers.create({
